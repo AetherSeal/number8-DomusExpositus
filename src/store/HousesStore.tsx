@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { BASE_URL } from "../utils/constants";
 
-type THouseStore = {};
 type THouse = {
   Id: number;
   DateListed: Date;
@@ -17,12 +16,25 @@ type THouse = {
   Parking: number;
   YearBuilt: number;
 };
+type THouseStore = {
+  houses: THouse[];
+  loading: boolean;
+  setHouses: () => Promise<void>;
+};
 
-const useHouseStore = create((set) => ({
+export const useHouseStore = create<THouseStore>((set) => ({
   houses: [] as THouse[],
+  loading: false,
   setHouses: async () => {
-    const request = await fetch(BASE_URL);
-    const data = await request.json();
-    set({ houses: data });
+    set({ loading: true });
+    try {
+      const request = await fetch("/api", { mode: "no-cors" });
+      const data = await request.json();
+      set({ houses: data });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ loading: false });
+    }
   },
 }));
