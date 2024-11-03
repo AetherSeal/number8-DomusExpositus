@@ -1,5 +1,6 @@
 import { useHouseStore } from "../../store/HousesStore";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import gridElement from "./gridElement";
 
 export default function Grid() {
   const setHouses = useHouseStore((state) => state.setHouses);
@@ -9,10 +10,12 @@ export default function Grid() {
     setHouses();
   }, [setHouses]);
   const renderHouseList = houses.map((house) => {
-    if (isloading) {
-      return <div>Loading...</div>;
-    }
-    return <li key={house.Id}>{house.Title}</li>;
+    return <li key={house.Id}>{gridElement({ house })}</li>;
   });
-  return <ul>{renderHouseList}</ul>;
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ul className="grid grid-cols-4 gap-4 bg-slate-500">{renderHouseList}</ul>
+    </Suspense>
+  );
 }
