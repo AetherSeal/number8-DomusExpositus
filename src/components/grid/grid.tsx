@@ -15,7 +15,9 @@ export default function Grid() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ul className="grid grid-cols-4 gap-4 bg-slate-500">{renderHouseList}</ul>
+      <ul className="grid grid-cols-4 gap-4 bg-slate-500 p-4">
+        {renderHouseList}
+      </ul>
     </Suspense>
   );
 }

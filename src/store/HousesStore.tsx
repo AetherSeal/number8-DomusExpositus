@@ -26,6 +26,10 @@ type THouseStore = {
   parkingFilter: number;
   priceRange: TPriceRange;
   setHouses: () => Promise<void>;
+  filterHouses: () => void;
+  setBathrooms: (bathrooms: number) => void;
+  setBedrooms: (bedrooms: number) => void;
+  setParking: (parking: number) => void;
 };
 
 const houseSchema = z.object({
@@ -53,6 +57,7 @@ export const useHouseStore = create<THouseStore>((set) => ({
   // method to filter houses based on the filters
   filterHouses: () => {
     set((state: THouseStore) => {
+      debugger;
       return {
         houses: state.houses.filter((house) => {
           return (
@@ -77,5 +82,17 @@ export const useHouseStore = create<THouseStore>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+  setBathrooms: (bathrooms: number) => {
+    set({ bathroomFilter: bathrooms });
+  },
+  setBedrooms: (bedrooms: number) => {
+    set((state: THouseStore) => {
+      state.filterHouses();
+      return { bedroomFilter: bedrooms };
+    });
+  },
+  setParking: (parking: number) => {
+    set({ parkingFilter: parking });
   },
 }));
