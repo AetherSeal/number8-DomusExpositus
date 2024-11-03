@@ -1,16 +1,21 @@
-import { useHouseStore } from "../../store/HousesStore";
+import { useHouseStore } from "../../stores/HousesStore";
 import { Suspense, useEffect } from "react";
-import gridElement from "./gridElement";
+import GridElement from "./gridElement";
 
 export default function Grid() {
   const setHouses = useHouseStore((state) => state.setHouses);
-  const houses = useHouseStore((state) => state.houses);
-  const isloading = useHouseStore((state) => state.loading);
+  const houses = useHouseStore((state) => state.filteredHouses);
+
   useEffect(() => {
     setHouses();
   }, [setHouses]);
+
   const renderHouseList = houses.map((house) => {
-    return <li key={house.Id}>{gridElement({ house })}</li>;
+    return (
+      <li key={house.Id}>
+        <GridElement house={house} />
+      </li>
+    );
   });
 
   return (

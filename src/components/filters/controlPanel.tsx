@@ -1,4 +1,4 @@
-import { useHouseStore } from "../../store/HousesStore";
+import { useHouseStore } from "../../stores/HousesStore";
 import Select from "./select";
 
 export default function ControlPanel() {

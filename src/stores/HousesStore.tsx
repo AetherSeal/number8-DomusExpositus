@@ -1,65 +1,43 @@
 import { create } from "zustand";
 import { z } from "zod";
+import { houseSchema, houseSchemaArray } from "../schemas/houseSchema";
 
-export type THouse = {
-  Id: number;
-  DateListed: Date;
-  Title: string;
-  Description: string;
-  "Sale Price": number;
-  ThumbnailURL: string;
-  PictureURL: string;
-  Location: string;
-  Sqft: number;
-  Bedrooms: number;
-  Bathrooms: number;
-  Parking: number;
-  YearBuilt: number;
-};
 type TPriceRange = [number, number];
+type TStatus = "grid" | "details";
+type THouse = z.infer<typeof houseSchema>;
+type THouses = z.infer<typeof houseSchemaArray>;
 
 type THouseStore = {
-  houses: THouse[];
-  loading: boolean;
+  houses: THouses;
+  filteredHouses: THouses;
+  status: TStatus;
+  selectedHouse: THouse | null;
   bathroomFilter: number;
   bedroomFilter: number;
   parkingFilter: number;
   priceRange: TPriceRange;
   setHouses: () => Promise<void>;
   filterHouses: () => void;
+  setStatus: (status: TStatus) => void;
   setBathrooms: (bathrooms: number) => void;
   setBedrooms: (bedrooms: number) => void;
   setParking: (parking: number) => void;
+  setSelectedHouse: (house: THouse) => void;
 };
 
-const houseSchema = z.object({
-  Id: z.number(),
-  DateListed: z.date(),
-  Title: z.string().min(3),
-  Description: z.string().min(3),
-  "Sale Price": z.number(),
-  ThumbnailURL: z.string().url(),
-  PictureURL: z.string().url(),
-  Location: z.string().min(3),
-  Sqft: z.number(),
-  Bedrooms: z.number(),
-  Bathrooms: z.number(),
-  Parking: z.number(),
-  YearBuilt: z.number(),
-});
-export const useHouseStore = create<THouseStore>((set) => ({
-  houses: [] as THouse[],
-  loading: false,
+export const useHouseStore = create<THouseStore>((set, get) => ({
+  houses: [],
+  filteredHouses: [],
+  status: "grid",
   bathroomFilter: 0,
   bedroomFilter: 0,
   parkingFilter: 0,
+  selectedHouse: null,
   priceRange: [0, 999999999999],
-  // method to filter houses based on the filters
   filterHouses: () => {
     set((state: THouseStore) => {
-      debugger;
       return {
-        houses: state.houses.filter((house) => {
+        filteredHouses: state.houses.filter((house) => {
           return (
             house.Bathrooms >= state.bathroomFilter &&
             house.Bedrooms >= state.bedroomFilter &&
@@ -72,27 +50,34 @@ export const useHouseStore = create<THouseStore>((set) => ({
     });
   },
   setHouses: async () => {
-    set({ loading: true });
     try {
       const request = await fetch("/api", { mode: "no-cors" });
       const data = await request.json();
-      set({ houses: data });
+      const validatedData = houseSchemaArray.safeParse(data as unknown);
+      if (!validatedData.success) {
+        console.log(validatedData.error);
+      }
+      set({ houses: validatedData.data, filteredHouses: validatedData.data });
     } catch (error) {
       console.error(error);
-    } finally {
-      set({ loading: false });
     }
+  },
+  setStatus: (status: TStatus) => {
+    set({ status: status });
   },
   setBathrooms: (bathrooms: number) => {
     set({ bathroomFilter: bathrooms });
+    get().filterHouses();
   },
   setBedrooms: (bedrooms: number) => {
-    set((state: THouseStore) => {
-      state.filterHouses();
-      return { bedroomFilter: bedrooms };
-    });
+    set({ bedroomFilter: bedrooms });
+    get().filterHouses();
   },
   setParking: (parking: number) => {
     set({ parkingFilter: parking });
+    get().filterHouses();
+  },
+  setSelectedHouse: (house: THouse) => {
+    set({ selectedHouse: house });
   },
 }));

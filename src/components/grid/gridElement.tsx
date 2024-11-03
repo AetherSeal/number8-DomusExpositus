@@ -1,6 +1,15 @@
-import { THouse } from "../../store/HousesStore";
+import { z } from "zod";
+import { houseSchema } from "../../schemas/houseSchema";
+import { useHouseStore } from "../../stores/HousesStore";
 
-export default function gridElement({ house }: { house: THouse }) {
+type GridElementProps = {
+  house: z.infer<typeof houseSchema>;
+};
+
+export default function GridElement({ house }: GridElementProps) {
+  const setSelectedHouse = useHouseStore((state) => state.setSelectedHouse);
+  const setStatus = useHouseStore((state) => state.setStatus);
+
   const rawPrice = house["Sale Price"];
   const price = rawPrice.toLocaleString("en-US", {
     style: "currency",
@@ -8,7 +17,13 @@ export default function gridElement({ house }: { house: THouse }) {
   });
 
   return (
-    <article className="shadow-inner p-2 rounded bg-white">
+    <article
+      className="shadow-inner p-2 rounded bg-white"
+      onClick={() => {
+        setSelectedHouse(house);
+        setStatus("details");
+      }}
+    >
       <img
         src={house.ThumbnailURL}
         alt={house.Title}
