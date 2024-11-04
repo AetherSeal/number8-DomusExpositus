@@ -23,6 +23,8 @@ type THouseStore = {
   setBedrooms: (bedrooms: number) => void;
   setParking: (parking: number) => void;
   setSelectedHouse: (house: THouse) => void;
+  setMinPrice: (minPrice: number) => void;
+  setMaxPrice: (maxPrice: number) => void;
 };
 
 export const useHouseStore = create<THouseStore>((set, get) => ({
@@ -79,5 +81,21 @@ export const useHouseStore = create<THouseStore>((set, get) => ({
   },
   setSelectedHouse: (house: THouse) => {
     set({ selectedHouse: house });
+  },
+  setMinPrice: (minPrice: number) => {
+    set((state: THouseStore) => {
+      return {
+        priceRange: [minPrice, state.priceRange[1]],
+      };
+    });
+    get().filterHouses();
+  },
+  setMaxPrice: (maxPrice: number) => {
+    set((state: THouseStore) => {
+      return {
+        priceRange: [state.priceRange[0], maxPrice],
+      };
+    });
+    get().filterHouses();
   },
 }));

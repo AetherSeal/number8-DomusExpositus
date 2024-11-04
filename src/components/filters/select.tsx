@@ -15,7 +15,7 @@ export default function Select({ onChange, name }: SelectProps) {
     });
   };
   return (
-    <label htmlFor="parkingFilter">
+    <label htmlFor="parkingFilter" className="flex flex-col">
       {name}
       <select
         onChange={onChange}

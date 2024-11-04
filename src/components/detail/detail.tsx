@@ -1,23 +1,19 @@
-import { useHouseStore } from "../../stores/HousesStore";
+import Contact from "../contact/contact";
+import DetailsBar from "./detailsBar/detailsBar";
+import DetailsHero from "./detailsHero/detailsHero";
 
 export default function Detail() {
-  const selectedHouse = useHouseStore((state) => state.selectedHouse);
   const renderDetails = () => {
-    if (!selectedHouse) {
-      return <p>Select a house to view details</p>;
-    }
     return (
-      <>
-        <h1>{selectedHouse.Title}</h1>
-        <img src={selectedHouse.PictureURL} alt={selectedHouse.Title} />
-        <p>{selectedHouse.Description}</p>
-        <p>{selectedHouse.Location}</p>
-        <p>
-          {selectedHouse.Bedrooms} beds | {selectedHouse.Bathrooms} baths
-        </p>
-        <p>{selectedHouse["Sale Price"]}</p>
-      </>
+      <section className="col-span-2 p-4">
+        <DetailsHero />
+        <DetailsBar />
+      </section>
     );
   };
-  return <section>{renderDetails()}</section>;
+  return (
+    <section className="grid grid-cols-3">
+      {renderDetails()} <Contact />
+    </section>
+  );
 }
