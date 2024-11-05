@@ -1,50 +1,48 @@
-# React + TypeScript + Vite
+# Real Estate Listings Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a Real Estate Listings application built with React, TypeScript, and Vite. The application allows users to browse and view details of various real estate listings.
 
-Currently, two official plugins are available:
+## Key Components
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Header, Main, Footer: These components form the basic layout of the application.
+- Grid: Displays individual house listings in a grid format.
+- Details: Shows detailed information about a selected house.
+- Contact Form: Displays the agent's contact form
+- Modal: Displays a modal with the saved houses
 
-## Expanding the ESLint configuration
+### State Management
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The application uses Zustand to manage the state of house listings and the selected house and modal.
 
-- Configure the top-level `parserOptions` property like this:
+### Schemas
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+The project uses zod for schema validation. The houseSchema defines the structure of a house listing.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Utilities
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Utility functions are defined in the utils/helpers.ts file.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Styling
+
+The project uses Tailwind CSS for styling, with configurations defined in tailwind.config.js and index.css.
+
+## Getting Started
+
+To get started with the project, follow these steps:
+
+1. Install dependencies:
+   `pnpm install`
+
+2. Run the development server:
+   `pnpm dev`
+
+3. Build the project for production:
+   `pnpm build`
+
+### Linting
+
+The project uses ESLint for linting. The configuration is defined in eslint.config.js.
+
+### License
+
+This project is licensed under the MIT License.
