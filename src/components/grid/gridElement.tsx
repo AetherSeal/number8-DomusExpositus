@@ -24,16 +24,16 @@ export default function GridElement({ house }: GridElementProps) {
       <GridImage src={house.ThumbnailURL} alt={house.Title} />
       <div className="p-2">
         <h2 className="truncate">{house.Title}</h2>
-        <p className="text-xs flex items-center">
+        <p className="text-xs flex items-center text-cyan-600">
           <FaMapMarkerAlt />
           {house.Location}
         </p>
-        <p className="text-xs flex items-center">
+        <p className="text-xs flex items-center text-cyan-600">
           <FaBed className="mr-1" />
           {house.Bedrooms} beds | <FaBath className="mx-1" />
           {house.Bathrooms} baths
         </p>
-        <p className="text-lg">{formatUSD(house["Sale Price"])}</p>
+        <p className="text-lg text-right ">{formatUSD(house["Sale Price"])}</p>
       </div>
     </article>
   );

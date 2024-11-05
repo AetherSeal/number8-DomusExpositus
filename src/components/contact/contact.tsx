@@ -1,80 +1,79 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { FieldValues, useForm } from "react-hook-form";
+import { ContactForm, contactFormSchema } from "../../schemas/contactSchema";
 
 export default function Contact() {
-  const contactFormSchema = z.object({
-    fullname: z
-      .string()
-      .min(6, { message: "Must be 6 or more characters long" }),
-    email: z.string().email({ message: "Invalid email address" }),
-    phone: z.string().optional(),
-    comments: z
-      .string()
-      .min(10, { message: "Comments must be longer" })
-      .optional(),
-  });
   const {
     register,
-    formState: { errors },
-  } = useForm({ resolver: zodResolver(contactFormSchema) });
+    handleSubmit,
+    formState: { errors, isSubmitSuccessful },
+    reset,
+  } = useForm<ContactForm>({ resolver: zodResolver(contactFormSchema) });
+
+  const onSubmit = async (data: FieldValues) => {
+    console.log(data);
+    reset();
+  };
 
   return (
-    <article className="bg-slate-500">
-      <h2 className="flex justify-center items-center pt-8 text-white text-2xl">
+    <article className="shadow-xl col-span-3 lg:col-span-1">
+      <h2 className="flex justify-center items-center pt-8 text-3xl text-cyan-600 font-thin">
         Contact Agent
       </h2>
-      <form className="flex flex-col p-8 gap-4">
+      <form
+        className="flex flex-col p-8 gap-4 transition-all"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <input
-          {...register("fullname", {
-            required: "full name is required",
-            minLength: 6,
-          })}
-          type="text"
+          {...register("fullname")}
           placeholder="Full Name"
-          className="px-4 py-2 rounded"
+          className="px-4 py-2 rounded border shadow-inner bg-gray-50/10"
         />
-        {errors.fullname && <p>{`${errors.fullname.message}`}</p>}
+        {errors.fullname && (
+          <ContactFormError>{`${errors.fullname.message}`}</ContactFormError>
+        )}
         <input
-          {...register("email", {
-            required: "email is required",
-            pattern: {
-              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-              message: "Invalid email",
-            },
-          })}
-          type="email"
-          name=""
-          id=""
+          {...register("email")}
           placeholder="Email"
-          className="px-4 py-2 rounded"
+          className="px-4 py-2 rounded border shadow-inner bg-gray-50/10"
         />
-        {errors.email && <p>{`${errors.email.message}`}</p>}
+        {errors.email && (
+          <ContactFormError>{`${errors.email.message}`}</ContactFormError>
+        )}
 
         <input
           {...register("phone")}
-          type="tel"
-          name=""
-          id=""
           placeholder="Phone"
-          className="px-4 py-2 rounded"
+          type="tel"
+          className="px-4 py-2 rounded border shadow-inner bg-gray-50/10"
         />
-        {errors.phone && <p>{`${errors.phone.message}`}</p>}
+        {errors.phone && (
+          <ContactFormError>{`${errors.phone.message}`}</ContactFormError>
+        )}
 
         <textarea
           {...register("comments")}
-          name=""
-          id=""
           cols={30}
           rows={10}
           placeholder="Comments"
-          className="px-4 py-2 rounded"
+          className="px-4 py-2 rounded border shadow-inner bg-gray-50/10"
         ></textarea>
-        {errors.comments && <p>{`${errors.comments.message}`}</p>}
+        {errors.comments && (
+          <ContactFormError>{`${errors.comments.message}`}</ContactFormError>
+        )}
         <button className="px-4 py-2 rounded bg-cyan-600 text-white shadow hover:scale-105 active:scale-95 transition-all">
           Contact Now
         </button>
+        {isSubmitSuccessful && (
+          <p className="text-green-500 text-md font-thin text-center">
+            Message sent!
+          </p>
+        )}
       </form>
     </article>
   );
 }
+
+export const ContactFormError = ({ children }: { children: string }) => {
+  return <p className="text-red-500 text-sm">{children}</p>;
+};

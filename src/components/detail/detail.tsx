@@ -5,7 +5,7 @@ import DetailsHero from "./detailsHero/detailsHero";
 export default function Detail() {
   const renderDetails = () => {
     return (
-      <section className="col-span-2 p-4">
+      <section className="col-span-3 lg:col-span-2 py-8 px-6 md:px-12">
         <DetailsHero />
         <DetailsBar />
       </section>

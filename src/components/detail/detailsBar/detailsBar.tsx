@@ -7,7 +7,7 @@ export default function DetailsBar() {
   }
   return (
     <>
-      <section className="flex justify-between">
+      <section className="flex justify-between pt-8">
         <div>
           <DetailsBarValue>{selectedHouse.Bedrooms}</DetailsBarValue>
           <DetailsBarLabel>Room</DetailsBarLabel>
@@ -29,13 +29,19 @@ export default function DetailsBar() {
           <DetailsBarLabel>Year Build</DetailsBarLabel>
         </div>
       </section>
-      <p className="pt-8">{selectedHouse.Description}</p>
+      <p className="pt-8 text-justify">{selectedHouse.Description}</p>
     </>
   );
 }
 const DetailsBarValue = ({ children }: { children: React.ReactNode }) => {
-  return <p className="justify-center flex text-3xl">{children}</p>;
+  return (
+    <p className="justify-center flex text-3xl text-cyan-600">{children}</p>
+  );
 };
 const DetailsBarLabel = ({ children }: { children: React.ReactNode }) => {
-  return <p className="justify-center flex text-lg">{children}</p>;
+  return (
+    <p className="justify-center flex text-lg text-cyan-600 font-thin">
+      {children}
+    </p>
+  );
 };

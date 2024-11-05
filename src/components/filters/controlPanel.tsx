@@ -9,7 +9,7 @@ export default function ControlPanel() {
   const setMaxPrice = useHouseStore((state) => state.setMaxPrice);
 
   return (
-    <section className="grid grid-cols-4 gap-4 p-4">
+    <section className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border-b-[1px] border-b-black/20">
       <Select
         name="Bedrooms"
         onChange={(event) => {

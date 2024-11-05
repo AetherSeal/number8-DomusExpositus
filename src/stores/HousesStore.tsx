@@ -1,15 +1,13 @@
 import { create } from "zustand";
-import { z } from "zod";
-import { houseSchema, houseSchemaArray } from "../schemas/houseSchema";
+import { houseSchemaArray, THouse, THouses } from "../schemas/houseSchema";
 
 type TPriceRange = [number, number];
 type TStatus = "grid" | "details";
-type THouse = z.infer<typeof houseSchema>;
-type THouses = z.infer<typeof houseSchemaArray>;
 
 type THouseStore = {
   houses: THouses;
   filteredHouses: THouses;
+  savedHouses: THouses;
   status: TStatus;
   selectedHouse: THouse | null;
   bathroomFilter: number;
@@ -25,11 +23,13 @@ type THouseStore = {
   setSelectedHouse: (house: THouse) => void;
   setMinPrice: (minPrice: number) => void;
   setMaxPrice: (maxPrice: number) => void;
+  setSavedHouses: (house: THouse) => void;
 };
 
 export const useHouseStore = create<THouseStore>((set, get) => ({
   houses: [],
   filteredHouses: [],
+  savedHouses: [],
   status: "grid",
   bathroomFilter: 0,
   bedroomFilter: 0,
@@ -97,5 +97,17 @@ export const useHouseStore = create<THouseStore>((set, get) => ({
       };
     });
     get().filterHouses();
+  },
+  setSavedHouses: (house: THouse) => {
+    const isOnTheList = get().savedHouses.find(
+      (savedHouse) => savedHouse.Id === house.Id
+    );
+    if (isOnTheList) {
+      const newSavedHouses = get().savedHouses.filter(
+        (savedHouse) => savedHouse.Id !== house.Id
+      );
+      return set({ savedHouses: newSavedHouses });
+    }
+    set({ savedHouses: [...get().savedHouses, house] });
   },
 }));

@@ -17,3 +17,6 @@ export const houseSchema = z.object({
 });
 
 export const houseSchemaArray = z.array(houseSchema);
+
+export type THouse = z.infer<typeof houseSchema>;
+export type THouses = z.infer<typeof houseSchemaArray>;
