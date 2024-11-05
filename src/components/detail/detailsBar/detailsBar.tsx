@@ -35,7 +35,7 @@ export default function DetailsBar() {
 }
 const DetailsBarValue = ({ children }: { children: React.ReactNode }) => {
   return (
-    <p className="justify-center flex text-3xl text-cyan-600">{children}</p>
+    <h3 className="justify-center flex text-3xl text-cyan-600">{children}</h3>
   );
 };
 const DetailsBarLabel = ({ children }: { children: React.ReactNode }) => {

@@ -65,14 +65,17 @@ export default function Contact() {
           Contact Now
         </button>
         {isSubmitSuccessful && (
-          <p className="text-green-500 text-md font-thin text-center">
-            Message sent!
-          </p>
+          <ContactFormSuccess>Message sent!</ContactFormSuccess>
         )}
       </form>
     </article>
   );
 }
+export const ContactFormSuccess = ({ children }: { children: string }) => {
+  return (
+    <p className="text-green-500 text-md font-thin text-center">{children}</p>
+  );
+};
 
 export const ContactFormError = ({ children }: { children: string }) => {
   return <p className="text-red-500 text-sm">{children}</p>;
